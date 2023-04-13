@@ -9,4 +9,4 @@ y = 8 * 2
 
 z = 13 / 0
 
-print(x + y + z)
+print(x + y)
