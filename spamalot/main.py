@@ -9,33 +9,6 @@ from subprocess import PIPE, Popen
 import hashlib
 from utils import clear_screen, load_exercise_order, check_exercises
 
-SKIP_CHECKS = []
-
-
-# def check_exercises(flake8_check=False):
-#     print("Checking exercises...")
-#     print(f"SKIP CHECKS: {SKIP_CHECKS}")
-#     for exercise in exercises:
-#         if exercise not in SKIP_CHECKS:
-#             cmd = "python3 exercises/{exercise}.py".format(exercise=exercise)
-
-#             try:
-#                 # flake_check(exercise, flake8_check)
-#                 exit_code = subprocess.call(
-#                     cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-#                 )
-#                 if exit_code != 0:
-#                     print("exit code: {exit_code}".format(exit_code=exit_code))
-#                     print("❌ exercises/{exercise}.py failed".format(exercise=exercise))
-#                     return subprocess.check_output(cmd, shell=True)
-#                 else:
-#                     print("✅ exercises/{exercise}.py passed".format(exercise=exercise))
-#                     SKIP_CHECKS.append(exercise)
-#             except subprocess.CalledProcessError:
-#                 break
-#         else:
-#             print("✅ exercises/{exercise}.py passed".format(exercise=exercise))
-
 
 class ModificationWatcher(FileSystemEventHandler):
     def __init__(self, exercises):
