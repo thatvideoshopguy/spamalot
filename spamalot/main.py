@@ -7,41 +7,42 @@ import subprocess
 import os
 from subprocess import PIPE, Popen
 import hashlib
-from utils import clear_screen, load_exercise_order
+from utils import clear_screen, load_exercise_order, check_exercises
 
 SKIP_CHECKS = []
 
 
-def check_exercises(flake8_check=False):
-    print("Checking exercises...")
-    print(f"SKIP CHECKS: {SKIP_CHECKS}")
-    for exercise in exercises:
-        if exercise not in SKIP_CHECKS:
-            cmd = "python3 exercises/{exercise}.py".format(exercise=exercise)
+# def check_exercises(flake8_check=False):
+#     print("Checking exercises...")
+#     print(f"SKIP CHECKS: {SKIP_CHECKS}")
+#     for exercise in exercises:
+#         if exercise not in SKIP_CHECKS:
+#             cmd = "python3 exercises/{exercise}.py".format(exercise=exercise)
 
-            try:
-                # flake_check(exercise, flake8_check)
-                exit_code = subprocess.call(
-                    cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-                )
-                if exit_code != 0:
-                    print("exit code: {exit_code}".format(exit_code=exit_code))
-                    print("❌ exercises/{exercise}.py failed".format(exercise=exercise))
-                    return subprocess.check_output(cmd, shell=True)
-                else:
-                    print("✅ exercises/{exercise}.py passed".format(exercise=exercise))
-                    SKIP_CHECKS.append(exercise)
-            except subprocess.CalledProcessError:
-                break
-        else:
-            print("✅ exercises/{exercise}.py passed".format(exercise=exercise))
+#             try:
+#                 # flake_check(exercise, flake8_check)
+#                 exit_code = subprocess.call(
+#                     cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+#                 )
+#                 if exit_code != 0:
+#                     print("exit code: {exit_code}".format(exit_code=exit_code))
+#                     print("❌ exercises/{exercise}.py failed".format(exercise=exercise))
+#                     return subprocess.check_output(cmd, shell=True)
+#                 else:
+#                     print("✅ exercises/{exercise}.py passed".format(exercise=exercise))
+#                     SKIP_CHECKS.append(exercise)
+#             except subprocess.CalledProcessError:
+#                 break
+#         else:
+#             print("✅ exercises/{exercise}.py passed".format(exercise=exercise))
 
 
 class ModificationWatcher(FileSystemEventHandler):
-    def __init__(self, debounce_interval=1.0):
+    def __init__(self, exercises):
         self.last_modified = datetime.now()
         # self.debounce_interval = debounce_interval
         self.file_hashes = {}
+        self.exercise_list = exercises
 
     def compute_file_hash(self, file_path):
         hasher = hashlib.md5()
@@ -87,28 +88,32 @@ class ModificationWatcher(FileSystemEventHandler):
         #     self.last_modified = datetime.now()
         if os.getenv("EGGLINGS_FLAKE8"):
             print("Running flake8 check")
-            clear_screen()
-            check_exercises(flake8_check=True)
+            # clear_screen()
+            print(self.exercise_list)
+            check_exercises(self.exercise_list)
         else:
-            print("Running exercise check")
-            clear_screen()
-            check_exercises(flake8_check=False)
+            print("Running exercise check on modified file")
+            print(self.exercise_list)
+            # clear_screen()
+            check_exercises(self.exercise_list)
 
 
 if __name__ == "__main__":
     exercises = load_exercise_order("exercises/exercises.yaml")
-    event_handler = ModificationWatcher()
+    event_handler = ModificationWatcher(exercises)
     observer = Observer()
     observer.schedule(event_handler, path="exercises/", recursive=False)
     observer.start()
 
     try:
         if os.getenv("EGGLINGS_FLAKE8"):
-            exercise_check = check_exercises(flake8_check=True)
+            exercise_check = check_exercises(exercises)
         else:
-            exercise_check = check_exercises(flake8_check=False)
+            print("Running exercise check")
+            exercise_check = check_exercises(exercises)
         if exercise_check:
-            print(exercise_check)
+            print("printing exercise check")
+            # print(exercise_check)
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
