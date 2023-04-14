@@ -1,9 +1,11 @@
 import subprocess
+import curses
+import io
 
 # SKIP_CHECKS = set()
 
 
-def run_exercise(exercise):
+def run_exercise(exercise: str) -> subprocess.CompletedProcess:
     cmd = f"python3 exercises/{exercise}.py"
     output = subprocess.run(
         cmd,
@@ -17,7 +19,10 @@ def run_exercise(exercise):
     return output
 
 
-def check_exercises(exercise_list):
+def check_exercises(exercise_list: list) -> bool:
+    # Initialize the output buffer
+    output_buffer = io.StringIO()
+
     all_passed = True
     for exercise in exercise_list:
         # if exercise not in SKIP_CHECKS:
