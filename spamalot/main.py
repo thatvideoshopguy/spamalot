@@ -12,32 +12,6 @@ from utils import clear_screen, load_exercise_order
 SKIP_CHECKS = []
 
 
-# def load_exercise_order():
-#     with open("exercises/exercises.yaml") as f:
-#         exercises = yaml.safe_load(f)
-#         print(f"exercises: {exercises}")
-#     return exercises
-
-
-def flake_check(exercise, flake8_check=True):
-    print("hit flake_check")
-    flake8_cmd = "flake8 exercises/{exercise}.py".format(exercise=exercise)
-    if flake8_check:
-        print("Checking flake8 for {exercise}".format(exercise=exercise))
-        exit_code = subprocess.call(
-            flake8_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-        )
-        if exit_code != 0:
-            print("flake_check exit code: {exit_code}".format(exit_code=exit_code))
-            p = Popen(
-                ["flake8", "exercises/{exercise}.py".format(exercise=exercise)],
-                stdin=PIPE,
-                stdout=PIPE,
-            )
-            output, err = p.communicate()
-            return output.decode("utf-8")
-
-
 def check_exercises(flake8_check=False):
     print("Checking exercises...")
     print(f"SKIP CHECKS: {SKIP_CHECKS}")
@@ -46,7 +20,7 @@ def check_exercises(flake8_check=False):
             cmd = "python3 exercises/{exercise}.py".format(exercise=exercise)
 
             try:
-                flake_check(exercise, flake8_check)
+                # flake_check(exercise, flake8_check)
                 exit_code = subprocess.call(
                     cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
                 )
