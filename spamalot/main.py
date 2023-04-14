@@ -4,25 +4,26 @@ from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 from datetime import datetime, timedelta
 import yaml
 import subprocess
-import os
+import os.path
 from subprocess import PIPE, Popen
 import hashlib
-from utils import clear_screen, load_exercise_order, check_exercises
+from utils import (
+    clear_screen,
+    load_exercise_order,
+    check_exercises,
+    compute_file_hash,
+    get_initial_file_hashes,
+)
 
 
 class ModificationWatcher(FileSystemEventHandler):
-    def __init__(self, exercises):
+    def __init__(self, exercise, file_hashes):
         self.last_modified = datetime.now()
         # self.debounce_interval = debounce_interval
-        self.file_hashes = {}
+        # self.file_hashes = {}
         self.exercise_list = exercises
-
-    def compute_file_hash(self, file_path):
-        hasher = hashlib.md5()
-        with open(file_path, "rb") as f:
-            buf = f.read()
-            hasher.update(buf)
-        return hasher.hexdigest()
+        self.file_hashes = file_hashes
+        print(f"file_hashes: {self.file_hashes}")
 
     def on_modified(self, event):
         if not isinstance(event, FileModifiedEvent):
@@ -36,17 +37,20 @@ class ModificationWatcher(FileSystemEventHandler):
 
         # if time_elapsed.total_seconds() < self.debounce_interval:
         #     return
+        print(f"event: {event}")
+        src_path = os.path.relpath(event.src_path, start=os.getcwd())
+        initial_file_hash = self.file_hashes[src_path]
+        current_file_hash = compute_file_hash(src_path)
 
-        file_hash = self.compute_file_hash(event.src_path)
-        print("file_hash: {file_hash}".format(file_hash=file_hash))
+        print(f"src_path: {src_path}")
+        print(f"current file_hash: {current_file_hash}")
+        print(f"file_hash: {self.file_hashes[src_path]}")
 
-        if (
-            event.src_path in self.file_hashes
-            and self.file_hashes[event.src_path] == file_hash
-        ):
+        if initial_file_hash == current_file_hash:
             return  # file contents haven't changed
 
-        self.file_hashes[event.src_path] = file_hash
+        self.file_hashes[src_path] = current_file_hash
+        # file_hash(event.src_path) = file_hash
         self.last_modified = current_time
 
         # On Linux and inside the container, it will double report file changes
@@ -73,7 +77,8 @@ class ModificationWatcher(FileSystemEventHandler):
 
 if __name__ == "__main__":
     exercises = load_exercise_order("exercises/exercises.yaml")
-    event_handler = ModificationWatcher(exercises)
+    file_hashes = get_initial_file_hashes(exercises)
+    event_handler = ModificationWatcher(exercises, file_hashes)
     observer = Observer()
     observer.schedule(event_handler, path="exercises/", recursive=False)
     observer.start()

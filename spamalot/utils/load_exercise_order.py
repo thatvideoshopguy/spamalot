@@ -1,5 +1,6 @@
 """This module contains a function to load the exercises.yaml file. """
 import yaml
+from .file_hash import compute_file_hash
 
 
 def load_exercise_order(exercises_yaml: str) -> list:
@@ -17,5 +18,18 @@ def load_exercise_order(exercises_yaml: str) -> list:
     return exercises_data.get("exercises", [])
 
 
+def get_initial_file_hashes(exercise_list):
+    file_hashes = {}
+    for exercise in exercise_list:
+        file_path = f"exercises/{exercise}.py"
+        file_hash = compute_file_hash(file_path)
+        file_hashes[file_path] = file_hash
+    return file_hashes
+
+
 if __name__ == "__main__":
-    print(load_exercise_order("exercises/exercises.yaml"))
+    exercise_list = load_exercise_order("exercises/exercises.yaml")
+    print(f"exercise_list: {exercise_list}")
+
+    file_hashes = get_initial_file_hashes(exercise_list)
+    print(f"Initial file hashes: {file_hashes}")
