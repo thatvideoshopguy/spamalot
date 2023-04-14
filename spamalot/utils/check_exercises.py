@@ -1,6 +1,6 @@
 import subprocess
 
-SKIP_CHECKS = set()
+# SKIP_CHECKS = set()
 
 
 def run_exercise(exercise):
@@ -18,19 +18,22 @@ def run_exercise(exercise):
 
 
 def check_exercises(exercise_list):
+    all_passed = True
     for exercise in exercise_list:
-        if exercise not in SKIP_CHECKS:
-            output = run_exercise(exercise)
-            if output.returncode != 0:
-                print(f"exit code: {output.returncode}")
-                print(f"❌ exercises/{exercise}.py failed")
-                print(output.stderr)
-                break
-            else:
-                print(f"✅ exercises/{exercise}.py passed")
-                SKIP_CHECKS.add(exercise)
+        # if exercise not in SKIP_CHECKS:
+        output = run_exercise(exercise)
+        if output.returncode != 0:
+            print(f"exit code: {output.returncode}")
+            print(f"❌ exercises/{exercise}.py failed")
+            print(output.stderr)
+            all_passed = False
+            break  # Stop the loop if the returncode is not equal to zero
         else:
             print(f"✅ exercises/{exercise}.py passed")
+            # SKIP_CHECKS.add(exercise)
+    # else:
+    #     print(f"✅ exercises/{exercise}.py passed")
+    return all_passed
 
 
 if __name__ == "__main__":
