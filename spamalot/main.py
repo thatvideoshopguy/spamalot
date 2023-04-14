@@ -7,16 +7,16 @@ import subprocess
 import os
 from subprocess import PIPE, Popen
 import hashlib
-from utils import clear_screen
+from utils import clear_screen, load_exercise_order
 
 SKIP_CHECKS = []
 
 
-def load_exercise_order():
-    with open("exercises/exercises.yaml") as f:
-        exercises = yaml.safe_load(f)
-        print(f"exercises: {exercises}")
-    return exercises
+# def load_exercise_order():
+#     with open("exercises/exercises.yaml") as f:
+#         exercises = yaml.safe_load(f)
+#         print(f"exercises: {exercises}")
+#     return exercises
 
 
 def flake_check(exercise, flake8_check=True):
@@ -122,7 +122,7 @@ class ModificationWatcher(FileSystemEventHandler):
 
 
 if __name__ == "__main__":
-    exercises = load_exercise_order().get("exercises", [])
+    exercises = load_exercise_order("exercises/exercises.yaml")
     event_handler = ModificationWatcher()
     observer = Observer()
     observer.schedule(event_handler, path="exercises/", recursive=False)
