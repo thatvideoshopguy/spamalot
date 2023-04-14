@@ -7,18 +7,15 @@ import subprocess
 import os
 from subprocess import PIPE, Popen
 import hashlib
+from utils import clear_screen
 
 SKIP_CHECKS = []
-
-
-def clear_screen():
-    os.system("cls" if os.name == "nt" else "clear")
-    # print("Watching for file changes...")
 
 
 def load_exercise_order():
     with open("exercises/exercises.yaml") as f:
         exercises = yaml.safe_load(f)
+        print(f"exercises: {exercises}")
     return exercises
 
 
@@ -69,7 +66,7 @@ def check_exercises(flake8_check=False):
 class ModificationWatcher(FileSystemEventHandler):
     def __init__(self, debounce_interval=1.0):
         self.last_modified = datetime.now()
-        self.debounce_interval = debounce_interval
+        # self.debounce_interval = debounce_interval
         self.file_hashes = {}
 
     def compute_file_hash(self, file_path):
@@ -87,10 +84,10 @@ class ModificationWatcher(FileSystemEventHandler):
             return
 
         current_time = datetime.now()
-        time_elapsed = current_time - self.last_modified
+        # time_elapsed = current_time - self.last_modified
 
-        if time_elapsed.total_seconds() < self.debounce_interval:
-            return
+        # if time_elapsed.total_seconds() < self.debounce_interval:
+        #     return
 
         file_hash = self.compute_file_hash(event.src_path)
         print("file_hash: {file_hash}".format(file_hash=file_hash))
@@ -116,11 +113,11 @@ class ModificationWatcher(FileSystemEventHandler):
         #     self.last_modified = datetime.now()
         if os.getenv("EGGLINGS_FLAKE8"):
             print("Running flake8 check")
-            # clear_screen()
+            clear_screen()
             check_exercises(flake8_check=True)
         else:
             print("Running exercise check")
-            # clear_screen()
+            clear_screen()
             check_exercises(flake8_check=False)
 
 
