@@ -8,12 +8,12 @@ from utils import clear_screen, check_exercises, compute_file_hash
 
 
 class Watcher(FileSystemEventHandler):
-    def __init__(self, exercise_order, file_hashes):
+    def __init__(self, exercise_order: list, file_hashes: dict) -> None:
         # self.last_modified = datetime.now()
         self.exercise_order = exercise_order
         self.file_hashes = file_hashes
 
-    def on_modified(self, event):
+    def on_modified(self, event: FileModifiedEvent) -> None:
         if not isinstance(event, FileModifiedEvent):
             return
 
@@ -41,7 +41,7 @@ class Watcher(FileSystemEventHandler):
             check_exercises(self.exercise_order)
 
 
-def start_watcher(exercise_order, file_hashes):
+def start_watcher(exercise_order: list, file_hashes: dict) -> Observer():
     event_handler = Watcher(exercise_order, file_hashes)
     observer = Observer()
     observer.schedule(

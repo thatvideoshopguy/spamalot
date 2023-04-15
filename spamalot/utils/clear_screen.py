@@ -3,7 +3,7 @@ import os
 import subprocess
 
 
-def clear_screen():
+def clear_screen() -> None:
     """Clear the screen using the appropriate command for the OS"""
     if os.name == "nt":
         subprocess.run("cls", shell=True, check=True)

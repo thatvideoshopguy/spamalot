@@ -15,7 +15,7 @@ def run_exercise(exercise: str) -> subprocess.CompletedProcess:
         text=True,
         check=False,
     )
-    print(f"output: {output}")
+    # print(f"output: {output}")
     return output
 
 
@@ -28,7 +28,7 @@ def check_exercises(exercise_list: list) -> bool:
         # if exercise not in SKIP_CHECKS:
         output = run_exercise(exercise)
         if output.returncode != 0:
-            print(f"exit code: {output.returncode}")
+            # print(f"exit code: {output.returncode}")
             print(f"❌ exercises/{exercise}.py failed")
             print(output.stderr)
             all_passed = False

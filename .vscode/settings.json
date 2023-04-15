@@ -16,22 +16,21 @@
     "python.linting.mypyArgs": [
         "--python-version",
         "3.11",
-        // "--ignore-missing-imports",
-        // "--warn-unused-configs",
-        // "--check-untyped-defs",
-        // "--strict-optional"
+        "--no-namespace-packages",
+        "--explicit-package-bases"
     ],
     "python.linting.pylintEnabled": true,
     "python.linting.pylintPath": "./venv/bin/pylint",
     "python.linting.pylintArgs": [
-        "--disable=C0114",
-        "--disable=C0115",
-        "--disable=C0116",
-        "--ignore-patterns",
-        "exercises/*/*.py",
+        // "--disable=C0114",
+        // "--disable=C0115",
+        // "--disable=C0116",
     ],
     "editor.rulers": [
         88
     ],
     "editor.formatOnSave": true,
+    "python.analysis.extraPaths": [
+        "./spamalot"
+    ]
 }
