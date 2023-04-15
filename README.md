@@ -1,5 +1,7 @@
 # Spamalot
 
+[![Code Climate](https://codeclimate.com/github/thatvideoshopguy/spamalot/badges/gpa.svg)](https://codeclimate.com/github/thatvideoshopguy/spamalot)
+
 ## What is this?
 
 [Rustlings](https://github.com/rust-lang/rustlings) is a program with interactive exercises for Rust that teaches by example. Each exercise contains code that has some sort of error, either with syntax or a test that doesn't work, and it is up to the user to fix the error before moving on to the next exercise. This is an attempt to make a similar program for Python, but runs inside a Docker container instead of the bare host machine.
