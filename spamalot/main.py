@@ -14,14 +14,14 @@ def main():
     exercises = load_exercise_order("exercises/exercises.yaml")
     file_hashes = load_file_hashes(exercises)
 
-    observer = start_watcher(exercises, file_hashes)
+    result, lines_length = check_exercises(exercises)
+
+    observer = start_watcher(exercises, file_hashes, lines_length)
 
     try:
-        check_exercises(exercises)
+        # result, lines_length = check_exercises(exercises)
+        print(result)
 
-        # if exercise_check:
-        #     print("printing exercise check")
-        #     # print(exercise_check)
         while True:
             time.sleep(1)
     except KeyboardInterrupt:

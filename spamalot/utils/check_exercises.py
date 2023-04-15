@@ -1,6 +1,8 @@
 import subprocess
 import curses
 import io
+from typing import Tuple
+
 
 # SKIP_CHECKS = set()
 
@@ -19,29 +21,47 @@ def run_exercise(exercise: str) -> subprocess.CompletedProcess:
     return output
 
 
-def check_exercises(exercise_list: list) -> bool:
+def check_exercises(exercise_list: list) -> Tuple[str, int]:
     # Initialize the output buffer
     output_buffer = io.StringIO()
 
-    all_passed = True
+    # all_passed = True
     for exercise in exercise_list:
-        # if exercise not in SKIP_CHECKS:
         output = run_exercise(exercise)
         if output.returncode != 0:
             # print(f"exit code: {output.returncode}")
-            print(f"❌ exercises/{exercise}.py failed")
-            print(output.stderr)
-            all_passed = False
+            output_buffer.write(f"❌ exercises/{exercise}.py failed\n")
+            output_buffer.write(output.stderr)
+            # all_passed = False
             break  # Stop the loop if the returncode is not equal to zero
         else:
-            print(f"✅ exercises/{exercise}.py passed")
-            # SKIP_CHECKS.add(exercise)
-    # else:
-    #     print(f"✅ exercises/{exercise}.py passed")
-    return all_passed
+            output_buffer.write(f"✅ exercises/{exercise}.py passed\n")
+
+    # Get the output string and count the number of lines
+    output_str = output_buffer.getvalue()
+    num_lines = len(output_str.splitlines())
+
+    # Print the output string to the screen
+    # print(output_str)
+    # print(f"num_lines: {num_lines}")
+
+    # Clear the screen from the current position to the end of the screen
+    # stdscr = curses.initscr()
+    # stdscr.clrtobot()
+    # stdscr.refresh()
+
+    # Print the output string to the screen
+    # print(output_str)
+
+    # Clean up curses
+    # curses.endwin()
+
+    return output_str, num_lines
 
 
 if __name__ == "__main__":
     exercise_order = ["basics/exercise1", "basics/exercise2", "basics/exercise3"]
-    check_exercises = check_exercises(exercise_order)
-    print(check_exercises)
+    result, lines_length = check_exercises(exercise_order)
+
+    print(result)
+    print(f"lines_length: {lines_length}")

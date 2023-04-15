@@ -1,5 +1,6 @@
 """Load the file hashes for the exercises. """
-from spamalot.utils import compute_file_hash, load_exercise_order
+from utils.compute_file_hash import compute_file_hash
+from utils.load_exercise_order import load_exercise_order
 
 
 def load_file_hashes(exercises: list) -> dict:
