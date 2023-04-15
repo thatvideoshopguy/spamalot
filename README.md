@@ -1,4 +1,4 @@
-# Egglings
+# Spamalot
 
 ## What is this?
 
@@ -37,13 +37,13 @@ To run this on your machine, create a virtual environment for python, using pyth
 
 Then install the dependencies in the requirements file with pip:
 
-```
+```python
 pip install -r requirements.txt
 ```
 
 Then run the main.py program with python:
 
-```
+```python
 python3 main.py
 ```
 

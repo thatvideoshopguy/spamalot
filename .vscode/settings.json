@@ -1,0 +1,36 @@
+{
+    "files.associations": {
+        "*.py": "python"
+    },
+    "python.defaultInterpreterPath": "./venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.formatting.blackPath": "./venv/bin/black",
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--extend-exclude",
+        "exercises",
+    ],
+    "python.linting.enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyPath": "./venv/bin/mypy",
+    "python.linting.mypyArgs": [
+        "--python-version",
+        "3.11",
+        "--no-namespace-packages",
+        "--explicit-package-bases"
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintPath": "./venv/bin/pylint",
+    "python.linting.pylintArgs": [
+        // "--disable=C0114",
+        // "--disable=C0115",
+        // "--disable=C0116",
+    ],
+    "editor.rulers": [
+        88
+    ],
+    "editor.formatOnSave": true,
+    "python.analysis.extraPaths": [
+        "./spamalot"
+    ]
+}
