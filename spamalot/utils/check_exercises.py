@@ -1,12 +1,27 @@
-import subprocess
-import curses
-import io
+""" Run and check the exercises in the exercise list.
 
-# SKIP_CHECKS = set()
+This module runs the exercises in the exercise list and checks the output.
+
+Typical usage example:
+    exercise_order = ["basics/exercise1", "basics/exercise2", "basics/exercise3"]
+    print(check_exercises(exercise_order))
+"""
+from pathlib import Path
+import subprocess
+from typing import List
 
 
 def run_exercise(exercise: str) -> subprocess.CompletedProcess:
-    cmd = f"python3 exercises/{exercise}.py"
+    """Run the exercise.
+
+    Args:
+        exercise (str): The exercise to run.
+
+    Returns:
+        subprocess.CompletedProcess: The output of the exercise.
+    """
+    exercise_path = Path("exercises") / f"{exercise}.py"
+    cmd = f"python3 {exercise_path}"
     output = subprocess.run(
         cmd,
         shell=True,
@@ -15,33 +30,32 @@ def run_exercise(exercise: str) -> subprocess.CompletedProcess:
         text=True,
         check=False,
     )
-    # print(f"output: {output}")
     return output
 
 
-def check_exercises(exercise_list: list) -> bool:
-    # Initialize the output buffer
-    output_buffer = io.StringIO()
+def check_exercises(exercise_list: List[str]) -> str:
+    """Check the exercises in the exercise list.
 
-    all_passed = True
+    Args:
+        exercise_list (list): A list of exercises.
+
+    Returns:
+        str: The output of the exercises.
+    """
+    output_buffer = []
+
     for exercise in exercise_list:
-        # if exercise not in SKIP_CHECKS:
         output = run_exercise(exercise)
         if output.returncode != 0:
-            # print(f"exit code: {output.returncode}")
-            print(f"❌ exercises/{exercise}.py failed")
-            print(output.stderr)
-            all_passed = False
-            break  # Stop the loop if the returncode is not equal to zero
+            output_buffer.append(f"❌ exercises/{exercise}.py failed\n")
+            output_buffer.append(output.stderr)
+            break
         else:
-            print(f"✅ exercises/{exercise}.py passed")
-            # SKIP_CHECKS.add(exercise)
-    # else:
-    #     print(f"✅ exercises/{exercise}.py passed")
-    return all_passed
+            output_buffer.append(f"✅ exercises/{exercise}.py passed\n")
+
+    return "".join(output_buffer)
 
 
 if __name__ == "__main__":
     exercise_order = ["basics/exercise1", "basics/exercise2", "basics/exercise3"]
-    check_exercises = check_exercises(exercise_order)
-    print(check_exercises)
+    print(check_exercises(exercise_order))

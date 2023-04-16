@@ -4,7 +4,10 @@ import subprocess
 
 
 def clear_screen() -> None:
-    """Clear the screen using the appropriate command for the OS"""
+    """Clear the shell screen
+
+    If the OS is Windows, use the 'cls' command. Otherwise, use the 'clear' command.
+    """
     if os.name == "nt":
         subprocess.run("cls", shell=True, check=True)
     else:

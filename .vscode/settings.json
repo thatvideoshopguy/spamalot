@@ -14,17 +14,12 @@
     "python.linting.mypyEnabled": true,
     "python.linting.mypyPath": "./venv/bin/mypy",
     "python.linting.mypyArgs": [
-        "--python-version",
-        "3.11",
-        "--no-namespace-packages",
-        "--explicit-package-bases"
+        "--config-file=./mypy.ini",
     ],
     "python.linting.pylintEnabled": true,
     "python.linting.pylintPath": "./venv/bin/pylint",
     "python.linting.pylintArgs": [
-        // "--disable=C0114",
-        // "--disable=C0115",
-        // "--disable=C0116",
+        "--rcfile=./.pylintrc"
     ],
     "editor.rulers": [
         88
