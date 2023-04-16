@@ -1,9 +1,27 @@
+""" Run and check the exercises in the exercise list.
+
+This module runs the exercises in the exercise list and checks the output.
+
+Typical usage example:
+    exercise_order = ["basics/exercise1", "basics/exercise2", "basics/exercise3"]
+    print(check_exercises(exercise_order))
+"""
+from pathlib import Path
 import subprocess
-import io
+from typing import List
 
 
 def run_exercise(exercise: str) -> subprocess.CompletedProcess:
-    cmd = f"python3 exercises/{exercise}.py"
+    """Run the exercise.
+
+    Args:
+        exercise (str): The exercise to run.
+
+    Returns:
+        subprocess.CompletedProcess: The output of the exercise.
+    """
+    exercise_path = Path("exercises") / f"{exercise}.py"
+    cmd = f"python3 {exercise_path}"
     output = subprocess.run(
         cmd,
         shell=True,
@@ -15,7 +33,7 @@ def run_exercise(exercise: str) -> subprocess.CompletedProcess:
     return output
 
 
-def check_exercises(exercise_list: list) -> str:
+def check_exercises(exercise_list: List[str]) -> str:
     """Check the exercises in the exercise list.
 
     Args:
@@ -24,18 +42,18 @@ def check_exercises(exercise_list: list) -> str:
     Returns:
         str: The output of the exercises.
     """
-    output_buffer = io.StringIO()
+    output_buffer = []
 
     for exercise in exercise_list:
         output = run_exercise(exercise)
         if output.returncode != 0:
-            output_buffer.write(f"❌ exercises/{exercise}.py failed\n")
-            output_buffer.write(output.stderr)
+            output_buffer.append(f"❌ exercises/{exercise}.py failed\n")
+            output_buffer.append(output.stderr)
             break
         else:
-            output_buffer.write(f"✅ exercises/{exercise}.py passed\n")
+            output_buffer.append(f"✅ exercises/{exercise}.py passed\n")
 
-    return output_buffer.getvalue()
+    return "".join(output_buffer)
 
 
 if __name__ == "__main__":

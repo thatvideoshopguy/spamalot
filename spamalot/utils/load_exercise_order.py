@@ -1,4 +1,8 @@
-"""This module contains a function to load the exercises.yaml file. """
+"""This module contains a function to load the exercises.yaml file. 
+
+Typical usage example:
+    exercise_list = load_exercise_order("exercises/exercises.yaml")
+"""
 import yaml
 
 

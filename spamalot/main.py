@@ -1,5 +1,8 @@
-"""Main entry point for the spamalot application. """
-import time
+"""This is the main entry point for the spamalot application.
+
+Typical usage example:
+    python3 -m spamalot.main
+"""
 from utils import (
     load_exercise_order,
     check_exercises,
@@ -9,9 +12,7 @@ from utils import (
 )
 
 
-def main():
-    """Main entry point for the spamalot application."""
-
+def main():  # pylint: disable=missing-function-docstring
     exercises = load_exercise_order("exercises/exercises.yaml")
     file_hashes = load_file_hashes(exercises)
 
@@ -21,8 +22,8 @@ def main():
         clear_screen()
         print(check_exercises(exercises))
 
-        while True:
-            time.sleep(1)
+        while watcher.is_alive():
+            watcher.join(1)
 
     except KeyboardInterrupt:
         watcher.stop()

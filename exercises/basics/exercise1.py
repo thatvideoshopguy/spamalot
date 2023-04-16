@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+# -*- coding: utf-8 -*-
 # pylint: skip-file
 
 # This is the standard Hello World program, but it's written

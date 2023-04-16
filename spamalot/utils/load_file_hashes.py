@@ -1,6 +1,9 @@
-"""Load the file hashes for the exercises. """
+"""Load the file hashes for the exercises.
+
+Typical usage example:
+    file_hashes = load_file_hashes(exercise_list)
+"""
 from utils.compute_file_hash import compute_file_hash
-from utils.load_exercise_order import load_exercise_order
 
 
 def load_file_hashes(exercises: list) -> dict:
@@ -22,7 +25,7 @@ def load_file_hashes(exercises: list) -> dict:
 
 
 if __name__ == "__main__":
-    exercise_list = load_exercise_order("exercises/exercises.yaml")
+    exercise_list = ["basics/exercise1", "basics/exercise2", "basics/exercise3"]
     file_hashes = load_file_hashes(exercise_list)
 
     print(f"Initial file hashes: {file_hashes}")
